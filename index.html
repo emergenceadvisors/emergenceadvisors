@@ -98,6 +98,11 @@
 
 /* ─── RESET ─── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--sans);
@@ -731,6 +736,9 @@ h2.sec-h em {
   outline: none;
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(192,154,66,0.1);
+}
+.fg input:focus-visible, .fg textarea:focus-visible, .fg select:focus-visible {
+  outline: none;
 }
 .fg textarea { resize: vertical; min-height: 110px; }
 .fg select {
