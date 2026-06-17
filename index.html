@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formsubmit.co;">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
 <meta name="keywords" content="financial management consulting, business management consulting, Orange County consulting, Laguna Niguel, process optimization, capital readiness, Southern California">
