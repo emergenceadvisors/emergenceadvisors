@@ -1357,9 +1357,15 @@ const activeObs = new IntersectionObserver(entries => {
     else visibleSections.delete(entry.target);
   });
   let top = null;
-  visibleSections.forEach(s => {
-    if (!top || s.getBoundingClientRect().top < top.getBoundingClientRect().top) top = s;
-  });
+  // Performance optimization: Avoid calling getBoundingClientRect() inside the IntersectionObserver
+  // callback to prevent synchronous layout thrashing. Since 'sections' is in DOM order, the first
+  // section found in the 'visibleSections' set is guaranteed to be the topmost visible section.
+  for (let i = 0; i < sections.length; i++) {
+    if (visibleSections.has(sections[i])) {
+      top = sections[i];
+      break;
+    }
+  }
   if (top) {
     navLinks.forEach(a => a.classList.remove('active'));
     const match = document.querySelector(`.sidenav a[href="#${top.id}"]`);
