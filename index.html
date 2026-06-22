@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formsubmit.co;">
+<!-- Security: Removed formsubmit.co from connect-src as we are replacing it with native secure netlify forms -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
 <meta name="keywords" content="financial management consulting, business management consulting, Orange County consulting, Laguna Niguel, process optimization, capital readiness, Southern California">
@@ -1217,7 +1218,7 @@ footer {
             <div id="f-inner">
               <h3>Request a Consultation</h3>
               <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.</p>
-              <form name="contact" method="POST" onsubmit="handleForm(event)">
+              <form name="contact" method="POST" data-netlify="true" onsubmit="handleForm(event)">
                 <input type="hidden" name="form-name" value="contact">
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
@@ -1411,14 +1412,14 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-  // Send to formsubmit.co
+  // Security: Submit natively to Netlify Forms via POST instead of a third-party endpoint (formsubmit.co)
+  // to avoid data exfiltration and privacy risks. Use application/x-www-form-urlencoded to match Netlify requirements
   const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  fetch('/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
   })
   .then(res => {
     if (!res.ok) throw new Error('Server error');
