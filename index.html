@@ -470,10 +470,11 @@ h2.sec-h em {
   cursor: pointer;
   transition: all 0.22s;
 }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-gold { background: var(--gold); color: var(--bg); font-weight: 600; }
-.btn-gold:hover { background: var(--gold-2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(192,154,66,0.22); }
+.btn-gold:not(:disabled):hover { background: var(--gold-2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(192,154,66,0.22); }
 .btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border-2); }
-.btn-ghost:hover { color: var(--text); border-color: var(--gold-line); background: var(--gold-dim); }
+.btn-ghost:not(:disabled):hover { color: var(--text); border-color: var(--gold-line); background: var(--gold-dim); }
 
 /* ─── SERVICES ─── */
 #services { background: var(--bg-2); }
@@ -1411,6 +1412,7 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
+  btn.setAttribute('aria-busy', 'true');
   // Send to formsubmit.co
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
@@ -1428,6 +1430,7 @@ function handleForm(e) {
   .catch(() => {
     btn.textContent = 'Send Message \u2192';
     btn.disabled = false;
+    btn.removeAttribute('aria-busy');
     alert('Something went wrong. Email info@emergenceadvisors.com or call (949) 409-5407.');
   });
 }
