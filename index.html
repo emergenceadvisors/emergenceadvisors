@@ -1360,6 +1360,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 const sections = document.querySelectorAll('section[id]');
 const navLinks  = document.querySelectorAll('.sidenav a');
 const visibleSections = new Set();
+let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1375,7 +1376,10 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-  if (top) {
+
+  // Performance optimization: Only query DOM and update classes when the active section actually changes
+  if (top && top.id !== currentActiveId) {
+    currentActiveId = top.id;
     navLinks.forEach(a => a.classList.remove('active'));
     const match = document.querySelector(`.sidenav a[href="#${top.id}"]`);
     if (match) match.classList.add('active');
