@@ -1217,7 +1217,7 @@ footer {
             <div id="f-inner">
               <h3>Request a Consultation</h3>
               <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.</p>
-              <form name="contact" method="POST" onsubmit="handleForm(event)">
+              <form name="contact" method="POST" data-netlify="true" onsubmit="handleForm(event)">
                 <input type="hidden" name="form-name" value="contact">
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
@@ -1411,14 +1411,14 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-  // Send to formsubmit.co
   const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  // Security Fix: Use native Netlify form handling to avoid data exfiltration to third-party endpoints.
+  // Submit via POST to '/' using application/x-www-form-urlencoded format.
+  fetch('/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
   })
   .then(res => {
     if (!res.ok) throw new Error('Server error');
