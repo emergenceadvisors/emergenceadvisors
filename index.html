@@ -1372,7 +1372,7 @@ navLinks.forEach(a => {
   }
 });
 const visibleSections = new Set();
-let activeNavId = null;
+let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1388,15 +1388,10 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-
-  // ⚡ Bolt: Only update DOM classes if the active section has changed
-  if (top && top.id !== activeNavId) {
-    if (activeNavId && navMap.has(activeNavId)) {
-      navMap.get(activeNavId).classList.remove('active');
-    } else {
-      navLinks.forEach(a => a.classList.remove('active'));
-    }
-    const match = navMap.get(top.id);
+  if (top && top.id !== currentActiveId) {
+    currentActiveId = top.id;
+    navLinks.forEach(a => a.classList.remove('active'));
+    const match = document.querySelector(`.sidenav a[href="#${top.id}"]`);
     if (match) match.classList.add('active');
     activeNavId = top.id;
   }
