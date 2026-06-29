@@ -9,10 +9,16 @@ describe('index.html', () => {
   let document;
   let window;
 
+  let mockIntersectionObserverCallbacks;
+
   beforeEach(() => {
+    mockIntersectionObserverCallbacks = [];
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
-      constructor(callback, options) {}
+      constructor(callback, options) {
+        this.callback = callback;
+        mockIntersectionObserverCallbacks.push(callback);
+      }
       observe() {}
       unobserve() {}
       disconnect() {}
@@ -22,10 +28,52 @@ describe('index.html', () => {
       runScripts: 'dangerously',
       beforeParse(window) {
         window.IntersectionObserver = IntersectionObserver;
+        window.mockIntersectionObserverCallbacks = mockIntersectionObserverCallbacks;
       }
     });
     document = dom.window.document;
     window = dom.window;
+  });
+
+  describe('active navigation links', () => {
+    it('updates active class based on section visibility', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidenav a');
+
+      // Ensure we have captured the IntersectionObserver callback
+      expect(window.mockIntersectionObserverCallbacks.length).toBeGreaterThan(0);
+      const activeObsCallback = window.mockIntersectionObserverCallbacks[0];
+
+      // Initial state - first link should be active, others not
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
+
+      // Simulate the first section intersecting
+      activeObsCallback([{
+        target: sections[0],
+        isIntersecting: true
+      }]);
+
+      // Since section 0 is visible, link 0 should be active
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
+
+      // Simulate scrolling: section 0 is out, section 1 is in
+      activeObsCallback([
+        {
+          target: sections[0],
+          isIntersecting: false
+        },
+        {
+          target: sections[1],
+          isIntersecting: true
+        }
+      ]);
+
+      // Now link 1 should be active and link 0 inactive
+      expect(navLinks[0].classList.contains('active')).toBe(false);
+      expect(navLinks[1].classList.contains('active')).toBe(true);
+    });
   });
 
   describe('handleForm', () => {
