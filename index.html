@@ -1391,15 +1391,14 @@ const activeObs = new IntersectionObserver(entries => {
     }
   }
   if (top && top.id !== currentActiveId) {
+    // Bolt Optimization: O(1) nav updates using navMap instead of iterating over NodeList
+    if (currentActiveId) {
+      const prev = navMap.get(currentActiveId);
+      if (prev) prev.classList.remove('active');
+    }
     currentActiveId = top.id;
-    // Bolt Optimization: Only update DOM when active section changes, and reuse existing NodeList
-    navLinks.forEach(a => {
-      if (a.getAttribute('href') === `#${top.id}`) {
-        a.classList.add('active');
-      } else {
-        a.classList.remove('active');
-      }
-    });
+    const match = navMap.get(top.id);
+    if (match) match.classList.add('active');
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
