@@ -1346,16 +1346,17 @@ function closeMob() {
 }
 
 /* smooth scroll */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const id = a.getAttribute('href');
-    if (id === '#') return;
-    const el = document.querySelector(id);
-    if (!el) return;
-    e.preventDefault();
-    const offset = window.innerWidth <= 1100 ? 68 : 0;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
-  });
+// ⚡ Bolt: Use event delegation instead of attaching O(n) event listeners
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = a.getAttribute('href');
+  if (id === '#') return;
+  const el = document.querySelector(id);
+  if (!el) return;
+  e.preventDefault();
+  const offset = window.innerWidth <= 1100 ? 68 : 0;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
 });
 
 /* active nav via IntersectionObserver */
