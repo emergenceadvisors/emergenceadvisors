@@ -12,11 +12,25 @@ describe('index.html', () => {
   beforeEach(() => {
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
-      constructor(callback, options) {}
-      observe() {}
-      unobserve() {}
+      constructor(callback, options) {
+        this.callback = callback;
+        this.options = options;
+        this.observedElements = new Set();
+        this.unobservedElements = new Set();
+        if (!IntersectionObserver.instances) {
+          IntersectionObserver.instances = [];
+        }
+        IntersectionObserver.instances.push(this);
+      }
+      observe(element) {
+        this.observedElements.add(element);
+      }
+      unobserve(element) {
+        this.unobservedElements.add(element);
+      }
       disconnect() {}
     }
+    IntersectionObserver.instances = [];
 
     dom = new JSDOM(html, {
       runScripts: 'dangerously',
@@ -26,6 +40,59 @@ describe('index.html', () => {
     });
     document = dom.window.document;
     window = dom.window;
+  });
+
+  describe('scroll reveal IntersectionObserver', () => {
+    let revealObserver;
+
+    beforeEach(() => {
+      // Find the specific instance for scroll reveal (threshold: 0.08)
+      revealObserver = window.IntersectionObserver.instances.find(
+        obs => obs.options && obs.options.threshold === 0.08
+      );
+    });
+
+    it('should initially observe all .reveal elements', () => {
+      const revealElements = document.querySelectorAll('.reveal');
+      expect(revealElements.length).toBeGreaterThan(0);
+      revealElements.forEach(el => {
+        expect(revealObserver.observedElements.has(el)).toBe(true);
+      });
+    });
+
+    it('should add "on" class and unobserve when intersecting', () => {
+      const targetElement = document.createElement('div');
+      targetElement.classList.add('reveal');
+
+      // Simulate observing
+      revealObserver.observe(targetElement);
+
+      // Simulate intersection
+      revealObserver.callback([{
+        isIntersecting: true,
+        target: targetElement
+      }]);
+
+      expect(targetElement.classList.contains('on')).toBe(true);
+      expect(revealObserver.unobservedElements.has(targetElement)).toBe(true);
+    });
+
+    it('should not add "on" class or unobserve when not intersecting', () => {
+      const targetElement = document.createElement('div');
+      targetElement.classList.add('reveal');
+
+      // Simulate observing
+      revealObserver.observe(targetElement);
+
+      // Simulate non-intersection
+      revealObserver.callback([{
+        isIntersecting: false,
+        target: targetElement
+      }]);
+
+      expect(targetElement.classList.contains('on')).toBe(false);
+      expect(revealObserver.unobservedElements.has(targetElement)).toBe(false);
+    });
   });
 
   describe('handleForm', () => {
