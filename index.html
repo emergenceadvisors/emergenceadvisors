@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
 <meta name="keywords" content="financial management consulting, business management consulting, Orange County consulting, Laguna Niguel, process optimization, capital readiness, Southern California">
@@ -901,11 +901,11 @@ footer {
   </button>
 </header>
 <nav class="mobile-nav" id="mob-nav" aria-label="Mobile navigation">
-  <a href="#mandate" onclick="closeMob()">Mandate</a>
-  <a href="#services" onclick="closeMob()">Services</a>
-  <a href="#process" onclick="closeMob()">Process</a>
-  <a href="#about" onclick="closeMob()">About</a>
-  <a href="#contact" class="mn-cta" onclick="closeMob()">Request a Consultation</a>
+  <a href="#mandate">Mandate</a>
+  <a href="#services">Services</a>
+  <a href="#process">Process</a>
+  <a href="#about">About</a>
+  <a href="#contact" class="mn-cta">Request a Consultation</a>
 </nav>
 
 <div class="layout">
@@ -1018,7 +1018,7 @@ footer {
       </div>
       <ul class="svc-accord">
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-1">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-1">
             <span class="svc-btn-l">
               <span class="svc-idx">01</span>
               <span class="svc-title">Financial Management &amp; Cleanup</span>
@@ -1030,7 +1030,7 @@ footer {
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-2">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-2">
             <span class="svc-btn-l">
               <span class="svc-idx">02</span>
               <span class="svc-title">Business Operations &amp; SOPs</span>
@@ -1042,7 +1042,7 @@ footer {
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-3">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-3">
             <span class="svc-btn-l">
               <span class="svc-idx">03</span>
               <span class="svc-title">Process Optimization</span>
@@ -1054,7 +1054,7 @@ footer {
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-4">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-4">
             <span class="svc-btn-l">
               <span class="svc-idx">04</span>
               <span class="svc-title">Strategic Planning</span>
@@ -1066,7 +1066,7 @@ footer {
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-5">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-5">
             <span class="svc-btn-l">
               <span class="svc-idx">05</span>
               <span class="svc-title">Performance Metrics &amp; Reporting</span>
@@ -1078,7 +1078,7 @@ footer {
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-6">
+          <button class="svc-btn" aria-expanded="false" aria-controls="svc-body-6">
             <span class="svc-btn-l">
               <span class="svc-idx">06</span>
               <span class="svc-title">Capital Readiness &amp; Lending Prep</span>
@@ -1218,7 +1218,7 @@ footer {
             <div id="f-inner">
               <h3>Request a Consultation</h3>
               <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.</p>
-              <form name="contact" method="POST" data-netlify="true" onsubmit="handleForm(event)">
+              <form name="contact" method="POST" data-netlify="true">
                 <input type="hidden" name="form-name" value="contact">
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
@@ -1329,132 +1329,6 @@ footer {
   </div>
 </footer>
 
-<script>
-/* mobile menu */
-const mobToggle = document.getElementById('mob-toggle');
-const mobNav    = document.getElementById('mob-nav');
-mobToggle.addEventListener('click', () => {
-  const isOpen = mobToggle.classList.toggle('open');
-  mobNav.classList.toggle('open');
-  mobToggle.setAttribute('aria-expanded', String(isOpen));
-});
-function closeMob() {
-  mobToggle.classList.remove('open');
-  mobNav.classList.remove('open');
-  mobToggle.setAttribute('aria-expanded', 'false');
-}
-
-/* smooth scroll */
-// ⚡ Bolt: Use event delegation instead of attaching O(n) event listeners
-document.addEventListener('click', e => {
-  const a = e.target.closest('a[href^="#"]');
-  if (!a) return;
-  const id = a.getAttribute('href');
-  if (id === '#') return;
-  const el = document.querySelector(id);
-  if (!el) return;
-  e.preventDefault();
-  const offset = window.innerWidth <= 1100 ? 68 : 0;
-  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
-});
-
-/* active nav via IntersectionObserver */
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.sidenav a');
-
-// Performance optimization: Cache navigation links in an O(1) Map.
-// This eliminates the need for expensive document.querySelector() calls
-// inside the high-frequency IntersectionObserver callback below,
-// reducing main thread blocking during scrolling.
-const navMap = new Map();
-navLinks.forEach(link => {
-  const href = link.getAttribute('href');
-  if (href && href.startsWith('#')) {
-    navMap.set(href.substring(1), link);
-  }
-});
-const visibleSections = new Set();
-let currentActiveId = null;
-const activeObs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) visibleSections.add(entry.target);
-    else visibleSections.delete(entry.target);
-  });
-  let top = null;
-  // Performance optimization: Avoid calling getBoundingClientRect() inside the IntersectionObserver
-  // callback to prevent synchronous layout thrashing. Since 'sections' is in DOM order, the first
-  // section found in the 'visibleSections' set is guaranteed to be the topmost visible section.
-  for (let i = 0; i < sections.length; i++) {
-    if (visibleSections.has(sections[i])) {
-      top = sections[i];
-      break;
-    }
-  }
-  if (top && top.id !== currentActiveId) {
-    currentActiveId = top.id;
-    // Bolt Optimization: Only update DOM when active section changes, and reuse existing NodeList
-    navLinks.forEach(a => {
-      if (a.getAttribute('href') === `#${top.id}`) {
-        a.classList.add('active');
-      } else {
-        a.classList.remove('active');
-      }
-    });
-  }
-}, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
-sections.forEach(s => activeObs.observe(s));
-
-/* accordion */
-function toggleSvc(btn) {
-  const item = btn.closest('li');
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.svc-accord li.open').forEach(i => {
-    i.classList.remove('open');
-    i.querySelector('.svc-btn').setAttribute('aria-expanded', 'false');
-  });
-  if (!wasOpen) {
-    item.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-  }
-}
-
-/* scroll reveal */
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); revealObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-/* netlify form */
-function handleForm(e) {
-  e.preventDefault();
-  const btn = document.getElementById('f-btn');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-  // Security Fix: Prevent data exfiltration to 3rd party endpoints
-  // Submit securely to Netlify's native form handling via root
-  const formData = new FormData(e.target);
-
-  fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(formData).toString()
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Server error');
-    document.getElementById('f-inner').style.display = 'none';
-    const successEl = document.getElementById('f-success');
-    successEl.classList.add('show');
-    successEl.focus();
-  })
-  .catch(() => {
-    btn.textContent = 'Send Message \u2192';
-    btn.disabled = false;
-    btn.removeAttribute('aria-busy');
-    alert('Something went wrong. Email info@emergenceadvisors.com or call (949) 409-5407.');
-  });
-}
-</script>
+<script src="main.js"></script>
 </body>
 </html>

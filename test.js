@@ -36,9 +36,9 @@ function setupMocks(initialToggleClasses = [], initialNavClasses = [], initialAr
 }
 
 test('closeMob function tests', async (t) => {
-  const html = fs.readFileSync('index.html', 'utf8');
-  const match = html.match(/function closeMob\(\) \{[\s\S]*?\}/);
-  assert.ok(match, 'closeMob function not found in index.html');
+  const scriptContent = fs.readFileSync('main.js', 'utf8');
+  const match = scriptContent.match(/function closeMob\(\) \{[\s\S]*?\}/);
+  assert.ok(match, 'closeMob function not found in main.js');
 
   // Evaluate the function into the current scope
   eval(match[0]);

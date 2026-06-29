@@ -26,6 +26,12 @@ describe('index.html', () => {
     });
     document = dom.window.document;
     window = dom.window;
+
+    // Load main.js manually since JSDOM doesn't load external scripts automatically by default
+    const scriptContent = fs.readFileSync(path.resolve(__dirname, '../main.js'), 'utf8');
+    const scriptEl = document.createElement('script');
+    scriptEl.textContent = scriptContent;
+    document.body.appendChild(scriptEl);
   });
 
   describe('handleForm', () => {
