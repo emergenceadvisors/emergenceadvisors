@@ -31,7 +31,7 @@ test('handleForm testing suite', async (t) => {
     domElements = {
       'f-btn': { textContent: 'Send Message \u2192', disabled: false, attributes: {}, setAttribute: function(attr, val) { this.attributes[attr] = val; }, removeAttribute: function(attr) { delete this.attributes[attr]; } },
       'f-inner': { style: { display: 'block' } },
-      'f-success': { classList: { classes: [], add: function(c) { this.classes.push(c); } } }
+      'f-success': { classList: { classes: [], add: function(c) { this.classes.push(c); } }, focus: function() {} }
     };
 
     global.document = {
@@ -114,10 +114,10 @@ test('handleForm testing suite', async (t) => {
 
     // Assert
     assert.strictEqual(fetchCalled, true);
-    assert.strictEqual(fetchUrl, 'https://formsubmit.co/ajax/info@emergence-advisors.com');
+    assert.strictEqual(fetchUrl, '/');
     assert.strictEqual(fetchOptions.method, 'POST');
-    assert.strictEqual(fetchOptions.headers['Content-Type'], 'application/json');
-    assert.strictEqual(fetchOptions.body, '{"name":"John Doe","email":"john@example.com"}');
+    assert.strictEqual(fetchOptions.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    assert.strictEqual(fetchOptions.body, 'name=John Doe&email=john@example.com');
 
     assert.strictEqual(domElements['f-btn'].disabled, true);
     assert.strictEqual(domElements['f-btn'].textContent, 'Sending...');
