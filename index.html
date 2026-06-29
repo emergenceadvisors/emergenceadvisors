@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formsubmit.co;">
+<!-- Security: Removed formsubmit.co from connect-src as we are replacing it with native secure netlify forms -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
 <meta name="keywords" content="financial management consulting, business management consulting, Orange County consulting, Laguna Niguel, process optimization, capital readiness, Southern California">
@@ -81,7 +82,7 @@
   --bg:        #09090c;
   --bg-2:      #0e0f14;
   --bg-3:      #141620;
-  --bg-light:  #f7f5f0;
+  --ink:       #0a0a0d;
   --text:      #ddd9d0;
   --text-2:    #888480;
   --text-3:    #4a4845;
@@ -1017,74 +1018,74 @@ footer {
       </div>
       <ul class="svc-accord">
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-1">
             <span class="svc-btn-l">
               <span class="svc-idx">01</span>
               <span class="svc-title">Financial Management &amp; Cleanup</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-1">
             <div class="svc-text">Your books are either wrong, incomplete, or in a format that does not tell you anything useful. We reconstruct the financials, close the gaps, and build reporting dashboards that give you a real picture of where the business stands — the kind a bank or a potential buyer would want to see.</div>
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-2">
             <span class="svc-btn-l">
               <span class="svc-idx">02</span>
               <span class="svc-title">Business Operations &amp; SOPs</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-2">
             <div class="svc-text">When a business depends entirely on the owner knowing everything, it does not scale and it does not sell. We map your workflows, identify where decisions are getting stuck, and write the standard operating procedures that let your team run without you answering every question.</div>
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-3">
             <span class="svc-btn-l">
               <span class="svc-idx">03</span>
               <span class="svc-title">Process Optimization</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-3">
             <div class="svc-text">Somewhere between where a job starts and where it ends, money is leaking out. Redundant steps, the wrong people handling the wrong tasks, or software nobody fully uses. We find the friction, quantify the cost, and redesign the flow.</div>
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-4">
             <span class="svc-btn-l">
               <span class="svc-idx">04</span>
               <span class="svc-title">Strategic Planning</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-4">
             <div class="svc-text">Strategy only means something when it comes with a budget, a timeline, and someone accountable for each piece. We build 12 to 36-month plans grounded in your actual numbers — not aspirational projections that look good in a slide deck and fall apart in month two.</div>
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-5">
             <span class="svc-btn-l">
               <span class="svc-idx">05</span>
               <span class="svc-title">Performance Metrics &amp; Reporting</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-5">
             <div class="svc-text">Most businesses track too many things and act on none of them. We identify the four or five numbers that actually drive outcomes in your specific business and build the discipline to review them weekly. Better numbers make better decisions inevitable.</div>
           </div>
         </li>
         <li class="reveal">
-          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false">
+          <button class="svc-btn" onclick="toggleSvc(this)" aria-expanded="false" aria-controls="svc-body-6">
             <span class="svc-btn-l">
               <span class="svc-idx">06</span>
               <span class="svc-title">Capital Readiness &amp; Lending Prep</span>
             </span>
             <span class="svc-plus" aria-hidden="true">+</span>
           </button>
-          <div class="svc-body">
+          <div class="svc-body" id="svc-body-6">
             <div class="svc-text">When you walk into a lender's office, the business needs to speak for itself. We prepare the financial package — projections, documentation, narrative — that gives you the credibility to get capital on the terms you want, not the terms you are handed.</div>
           </div>
         </li>
@@ -1216,32 +1217,32 @@ footer {
           <div class="form-wrap">
             <div id="f-inner">
               <h3>Request a Consultation</h3>
-              <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.</p>
+              <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.<br><span style="font-size: 0.9em; opacity: 0.8;"><span style="color: var(--gold);" aria-hidden="true">*</span> Indicates a required field</span></p>
               <form name="contact" method="POST" onsubmit="handleForm(event)">
                 <input type="hidden" name="form-name" value="contact">
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-name">Your Name</label>
+                    <label for="f-name">Your Name <span style="color: var(--gold);" aria-hidden="true">*</span></label>
                     <input type="text" id="f-name" name="name" placeholder="Full name" maxlength="100" required>
                   </div>
                   <div class="fg">
-                    <label for="f-email">Email Address</label>
+                    <label for="f-email">Email Address <span style="color: var(--gold);" aria-hidden="true">*</span></label>
                     <input type="email" id="f-email" name="email" placeholder="you@company.com" maxlength="100" required>
                   </div>
                 </div>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-phone">Phone</label>
+                    <label for="f-phone">Phone <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
                     <input type="tel" id="f-phone" name="phone" placeholder="(714) 000-0000" maxlength="30">
                   </div>
                   <div class="fg">
-                    <label for="f-co">Business Name</label>
+                    <label for="f-co">Business Name <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
                     <input type="text" id="f-co" name="company" placeholder="Your company" maxlength="100">
                   </div>
                 </div>
                 <div class="fg">
-                  <label for="f-svc">What do you need help with?</label>
+                  <label for="f-svc">What do you need help with? <span style="color: var(--gold);" aria-hidden="true">*</span></label>
                   <select id="f-svc" name="service" required>
                     <option value="">Select one...</option>
                     <option value="financial-management">Financial management &amp; cleanup</option>
@@ -1254,15 +1255,15 @@ footer {
                   </select>
                 </div>
                 <div class="fg">
-                  <label for="f-msg">Describe the situation</label>
+                  <label for="f-msg">Describe the situation <span style="color: var(--gold);" aria-hidden="true">*</span></label>
                   <textarea id="f-msg" name="message" placeholder="What is the biggest problem in your business right now?" maxlength="2000" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-gold btn-full" id="f-btn">Send Message &rarr;</button>
                 <p class="form-note">We do not share your information. No cold calls. No lists.</p>
               </form>
             </div>
-            <div class="success-state" id="f-success">
-              <div class="success-mark">&#10003;</div>
+            <div class="success-state" id="f-success" role="status" aria-live="polite">
+              <div class="success-mark" aria-hidden="true">&#10003;</div>
               <h3>Message received.</h3>
               <p>We will be in touch within one business day. Urgent? Call <a href="tel:+19494095407" style="color:var(--gold);text-decoration:none;">(949) 409-5407</a>.</p>
             </div>
@@ -1359,6 +1360,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 /* active nav via IntersectionObserver */
 const sections = document.querySelectorAll('section[id]');
 const navLinks  = document.querySelectorAll('.sidenav a');
+
+// Performance optimization: Cache navigation links in an O(1) Map.
+// This eliminates the need for expensive document.querySelector() calls
+// inside the high-frequency IntersectionObserver callback below,
+// reducing main thread blocking during scrolling.
+const navMap = new Map();
+navLinks.forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && href.startsWith('#')) {
+    navMap.set(href.substring(1), link);
+  }
+});
 const visibleSections = new Set();
 let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
@@ -1418,14 +1431,14 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-  // Send to formsubmit.co
+  // Security: Submit natively to Netlify Forms via POST instead of a third-party endpoint (formsubmit.co)
+  // to avoid data exfiltration and privacy risks. Use application/x-www-form-urlencoded to match Netlify requirements
   const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  fetch('/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
   })
   .then(res => {
     if (!res.ok) throw new Error('Server error');
