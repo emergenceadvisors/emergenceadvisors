@@ -29,7 +29,7 @@ test('handleForm testing suite', async (t) => {
   t.beforeEach(() => {
     // Reset DOM mocks
     domElements = {
-      'f-btn': { textContent: 'Send Message \u2192', disabled: false, attributes: {}, setAttribute: function(attr, val) { this.attributes[attr] = val; }, removeAttribute: function(attr) { delete this.attributes[attr]; } },
+      'f-btn': { textContent: 'Send Message \u2192', disabled: false, attributes: {}, setAttribute: function(attr, val) { this.attributes[attr] = val; }, removeAttribute: function(attr) { delete this.attributes[attr]; }, focus: function() {} },
       'f-inner': { style: { display: 'block' } },
       'f-success': { classList: { classes: [], add: function(c) { this.classes.push(c); } }, focus: function() {} }
     };
@@ -110,7 +110,7 @@ test('handleForm testing suite', async (t) => {
     await global.handleForm(mockEvent); // handleForm doesn't return a promise but fetch inside it does
 
     // wait a tick for promise to resolve
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     // Assert
     assert.strictEqual(fetchCalled, true);

@@ -9,23 +9,72 @@ describe('index.html', () => {
   let document;
   let window;
 
+  let mockIntersectionObserverCallbacks;
+
   beforeEach(() => {
+    mockIntersectionObserverCallbacks = [];
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
-      constructor(callback, options) {}
+      constructor(callback, options) {
+        this.callback = callback;
+        mockIntersectionObserverCallbacks.push(callback);
+      }
       observe() {}
       unobserve() {}
       disconnect() {}
     }
+    IntersectionObserver.instances = [];
 
     dom = new JSDOM(html, {
       runScripts: 'dangerously',
       beforeParse(window) {
         window.IntersectionObserver = IntersectionObserver;
+        window.mockIntersectionObserverCallbacks = mockIntersectionObserverCallbacks;
       }
     });
     document = dom.window.document;
     window = dom.window;
+  });
+
+  describe('active navigation links', () => {
+    it('updates active class based on section visibility', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidenav a');
+
+      // Ensure we have captured the IntersectionObserver callback
+      expect(window.mockIntersectionObserverCallbacks.length).toBeGreaterThan(0);
+      const activeObsCallback = window.mockIntersectionObserverCallbacks[0];
+
+      // Initial state - first link should be active, others not
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
+
+      // Simulate the first section intersecting
+      activeObsCallback([{
+        target: sections[0],
+        isIntersecting: true
+      }]);
+
+      // Since section 0 is visible, link 0 should be active
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
+
+      // Simulate scrolling: section 0 is out, section 1 is in
+      activeObsCallback([
+        {
+          target: sections[0],
+          isIntersecting: false
+        },
+        {
+          target: sections[1],
+          isIntersecting: true
+        }
+      ]);
+
+      // Now link 1 should be active and link 0 inactive
+      expect(navLinks[0].classList.contains('active')).toBe(false);
+      expect(navLinks[1].classList.contains('active')).toBe(true);
+    });
   });
 
   describe('handleForm', () => {
@@ -110,6 +159,71 @@ describe('index.html', () => {
       expect(inner.style.display).toBe('none');
       expect(success.classList.contains('show')).toBe(true);
       expect(window.alert).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('toggleSvc', () => {
+    let items;
+    let btns;
+
+    beforeEach(() => {
+      items = document.querySelectorAll('.svc-accord li');
+      btns = document.querySelectorAll('.svc-accord .svc-btn');
+    });
+
+    it('opens a closed item and updates aria-expanded', () => {
+      const item = items[0];
+      const btn = btns[0];
+
+      // Initial state check
+      expect(item.classList.contains('open')).toBe(false);
+      expect(btn.getAttribute('aria-expanded')).toBe('false');
+
+      // Call toggleSvc
+      window.toggleSvc(btn);
+
+      // Verify open state
+      expect(item.classList.contains('open')).toBe(true);
+      expect(btn.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('closes an already open item', () => {
+      const item = items[0];
+      const btn = btns[0];
+
+      // Open it first
+      window.toggleSvc(btn);
+      expect(item.classList.contains('open')).toBe(true);
+      expect(btn.getAttribute('aria-expanded')).toBe('true');
+
+      // Click again to close
+      window.toggleSvc(btn);
+
+      // Verify closed state
+      expect(item.classList.contains('open')).toBe(false);
+      expect(btn.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('closes other open items when opening a new one', () => {
+      const item1 = items[0];
+      const btn1 = btns[0];
+      const item2 = items[1];
+      const btn2 = btns[1];
+
+      // Open first item
+      window.toggleSvc(btn1);
+      expect(item1.classList.contains('open')).toBe(true);
+
+      // Open second item
+      window.toggleSvc(btn2);
+
+      // Verify second item is open
+      expect(item2.classList.contains('open')).toBe(true);
+      expect(btn2.getAttribute('aria-expanded')).toBe('true');
+
+      // Verify first item is closed
+      expect(item1.classList.contains('open')).toBe(false);
+      expect(btn1.getAttribute('aria-expanded')).toBe('false');
     });
   });
 });
