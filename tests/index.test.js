@@ -28,6 +28,37 @@ describe('index.html', () => {
     window = dom.window;
   });
 
+  describe('Mobile Menu Toggle', () => {
+    let mobToggle;
+    let mobNav;
+
+    beforeEach(() => {
+      mobToggle = document.getElementById('mob-toggle');
+      mobNav = document.getElementById('mob-nav');
+    });
+
+    it('toggles mobile menu classes and aria-expanded attribute on click', () => {
+      // Initial state
+      expect(mobToggle.classList.contains('open')).toBe(false);
+      expect(mobNav.classList.contains('open')).toBe(false);
+      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+
+      // First click - opens menu
+      mobToggle.click();
+
+      expect(mobToggle.classList.contains('open')).toBe(true);
+      expect(mobNav.classList.contains('open')).toBe(true);
+      expect(mobToggle.getAttribute('aria-expanded')).toBe('true');
+
+      // Second click - closes menu
+      mobToggle.click();
+
+      expect(mobToggle.classList.contains('open')).toBe(false);
+      expect(mobNav.classList.contains('open')).toBe(false);
+      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+    });
+  });
+
   describe('handleForm', () => {
     let mockFetch;
     let btn;
