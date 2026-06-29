@@ -1390,16 +1390,13 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
+
+  // Performance optimization: Only query DOM and update classes when the active section actually changes
   if (top && top.id !== currentActiveId) {
     currentActiveId = top.id;
-    // Performance optimization: Avoid redundant querySelector and prevent thrashing DOM when class isn't changing.
-    navLinks.forEach(a => {
-      if (a.getAttribute('href') === `#${top.id}`) {
-        a.classList.add('active');
-      } else {
-        a.classList.remove('active');
-      }
-    });
+    navLinks.forEach(a => a.classList.remove('active'));
+    const match = document.querySelector(`.sidenav a[href="#${top.id}"]`);
+    if (match) match.classList.add('active');
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
