@@ -2,3 +2,8 @@
 **Vulnerability:** Missing input lengths limits (`maxlength`) on public-facing HTML forms. This can lead to excessively large payloads being sent to the backend, causing potential Denial of Service (DoS) or database string truncation issues.
 **Learning:** Even simple static sites using third-party form handling (e.g. Netlify forms) are susceptible to simple resource exhaustion vectors and abuse if limits are absent.
 **Prevention:** Always enforce logical constraints client-side (e.g., `maxlength`, `min`, `max`, `pattern`) as defense-in-depth, based on reasonable expected lengths for the field data, even if server-side handles ultimate validation.
+
+## 2026-06-17 - Incorrect Form Action Domain
+**Vulnerability:** Incorrect domain in form submit URL (emergence-advisors.com vs emergenceadvisors.com).
+**Learning:** Submitting forms to slightly incorrect URLs can result in data leakage to uncontrolled third parties (potential phishing or PII exposure).
+**Prevention:** Carefully verify third-party domains in endpoints against the primary authorized domain list.

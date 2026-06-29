@@ -81,7 +81,7 @@
   --bg:        #09090c;
   --bg-2:      #0e0f14;
   --bg-3:      #141620;
-  --bg-light:  #f7f5f0;
+  --ink:       #0a0a0d;
   --text:      #ddd9d0;
   --text-2:    #888480;
   --text-3:    #4a4845;
@@ -1415,7 +1415,7 @@ function handleForm(e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  fetch('https://formsubmit.co/ajax/info@emergenceadvisors.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(data)
