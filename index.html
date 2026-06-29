@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formsubmit.co;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
 <meta name="keywords" content="financial management consulting, business management consulting, Orange County consulting, Laguna Niguel, process optimization, capital readiness, Southern California">
@@ -81,7 +81,7 @@
   --bg:        #09090c;
   --bg-2:      #0e0f14;
   --bg-3:      #141620;
-  --bg-light:  #f7f5f0;
+  --ink:       #0a0a0d;
   --text:      #ddd9d0;
   --text-2:    #888480;
   --text-3:    #4a4845;
@@ -1217,31 +1217,31 @@ footer {
             <div id="f-inner">
               <h3>Request a Consultation</h3>
               <p class="form-sub">We review every submission personally. If it is urgent, call <a href="tel:+19494095407">(949) 409-5407</a>.</p>
-              <form name="contact" method="POST" onsubmit="handleForm(event)">
+              <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleForm(event)">
                 <input type="hidden" name="form-name" value="contact">
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-name">Your Name</label>
+                    <label for="f-name">Your Name <span aria-hidden="true" style="color:var(--gold)">*</span></label>
                     <input type="text" id="f-name" name="name" placeholder="Full name" maxlength="100" required>
                   </div>
                   <div class="fg">
-                    <label for="f-email">Email Address</label>
+                    <label for="f-email">Email Address <span aria-hidden="true" style="color:var(--gold)">*</span></label>
                     <input type="email" id="f-email" name="email" placeholder="you@company.com" maxlength="100" required>
                   </div>
                 </div>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-phone">Phone</label>
+                    <label for="f-phone">Phone <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
                     <input type="tel" id="f-phone" name="phone" placeholder="(714) 000-0000" maxlength="30">
                   </div>
                   <div class="fg">
-                    <label for="f-co">Business Name</label>
+                    <label for="f-co">Business Name <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
                     <input type="text" id="f-co" name="company" placeholder="Your company" maxlength="100">
                   </div>
                 </div>
                 <div class="fg">
-                  <label for="f-svc">What do you need help with?</label>
+                  <label for="f-svc">What do you need help with? <span aria-hidden="true" style="color:var(--gold)">*</span></label>
                   <select id="f-svc" name="service" required>
                     <option value="">Select one...</option>
                     <option value="financial-management">Financial management &amp; cleanup</option>
@@ -1254,15 +1254,15 @@ footer {
                   </select>
                 </div>
                 <div class="fg">
-                  <label for="f-msg">Describe the situation</label>
+                  <label for="f-msg">Describe the situation <span aria-hidden="true" style="color:var(--gold)">*</span></label>
                   <textarea id="f-msg" name="message" placeholder="What is the biggest problem in your business right now?" maxlength="2000" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-gold btn-full" id="f-btn">Send Message &rarr;</button>
                 <p class="form-note">We do not share your information. No cold calls. No lists.</p>
               </form>
             </div>
-            <div class="success-state" id="f-success">
-              <div class="success-mark">&#10003;</div>
+            <div class="success-state" id="f-success" role="status" aria-live="polite">
+              <div class="success-mark" aria-hidden="true">&#10003;</div>
               <h3>Message received.</h3>
               <p>We will be in touch within one business day. Urgent? Call <a href="tel:+19494095407" style="color:var(--gold);text-decoration:none;">(949) 409-5407</a>.</p>
             </div>
@@ -1366,6 +1366,7 @@ navLinks.forEach(link => {
 });
 
 const visibleSections = new Set();
+let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1381,11 +1382,13 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-  if (top) {
+  if (top && top.id !== currentActiveId) {
+    currentActiveId = top.id;
     navLinks.forEach(a => a.classList.remove('active'));
     // Performance optimization: Use pre-cached map instead of DOM querying inside scroll callback
     const match = navLinkMap.get(top.id);
     if (match) match.classList.add('active');
+    activeNavId = top.id;
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
@@ -1418,14 +1421,13 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-  // Send to formsubmit.co
+  // Send to Netlify forms endpoint
   const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  fetch('/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
   })
   .then(res => {
     if (!res.ok) throw new Error('Server error');
