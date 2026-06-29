@@ -36,7 +36,7 @@ function setupMocks(initialToggleClasses = [], initialNavClasses = [], initialAr
 }
 
 test('closeMob function tests', async (t) => {
-  const html = fs.readFileSync('index.html', 'utf8');
+  const html = await fs.promises.readFile('index.html', 'utf8');
   const match = html.match(/function closeMob\(\) \{[\s\S]*?\}/);
   assert.ok(match, 'closeMob function not found in index.html');
 
