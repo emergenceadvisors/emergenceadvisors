@@ -2,17 +2,12 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 
-// Extract the handleForm function from index.html
-const html = fs.readFileSync('index.html', 'utf8');
-const scriptContents = html.match(/<script>([\s\S]*?)<\/script>/g);
+// Extract the handleForm function from main.js
+const scriptContent = fs.readFileSync('main.js', 'utf8');
 let handleFormCode = null;
-for (let script of scriptContents) {
-  if (script.includes('function handleForm(e)')) {
-    const handleFormMatch = script.match(/(function handleForm\(e\) \{[\s\S]*?\n\})/);
-    if (handleFormMatch) {
-      handleFormCode = handleFormMatch[1];
-    }
-  }
+const handleFormMatch = scriptContent.match(/(function handleForm\(e\) \{[\s\S]*?\n\})/);
+if (handleFormMatch) {
+  handleFormCode = handleFormMatch[1];
 }
 
 if (!handleFormCode) {
@@ -57,7 +52,7 @@ test('handleForm testing suite', async (t) => {
         this.params = formData ? [...formData] : [];
       }
       toString() {
-        return this.params.map(([k, v]) => `${k}=${v}`).join('&');
+        return this.params.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
       }
     };
 
@@ -117,7 +112,7 @@ test('handleForm testing suite', async (t) => {
     assert.strictEqual(fetchUrl, '/');
     assert.strictEqual(fetchOptions.method, 'POST');
     assert.strictEqual(fetchOptions.headers['Content-Type'], 'application/x-www-form-urlencoded');
-    assert.strictEqual(fetchOptions.body, 'name=John Doe&email=john@example.com');
+    assert.strictEqual(fetchOptions.body, 'name=John%20Doe&email=john%40example.com');
 
     assert.strictEqual(domElements['f-btn'].disabled, true);
     assert.strictEqual(domElements['f-btn'].textContent, 'Sending...');
