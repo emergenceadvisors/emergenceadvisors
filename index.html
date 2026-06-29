@@ -99,6 +99,24 @@
 
 /* ─── RESET ─── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 8px 16px;
+  z-index: 9999;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
@@ -333,6 +351,9 @@ body {
 .main {
   margin-left: var(--sidebar-w);
   min-height: 100vh;
+}
+.main:focus {
+  outline: none;
 }
 
 /* ─── SECTIONS ─── */
@@ -892,6 +913,7 @@ footer {
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- MOBILE HEADER -->
 <header class="mobile-header">
@@ -954,7 +976,7 @@ footer {
   </aside>
 
   <!-- MAIN -->
-  <main class="main">
+  <main class="main" id="main-content" tabindex="-1">
 
     <!-- 01 MANDATE -->
     <section id="mandate">
