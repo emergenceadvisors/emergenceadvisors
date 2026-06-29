@@ -1359,12 +1359,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 /* active nav via IntersectionObserver */
 const sections = document.querySelectorAll('section[id]');
 const navLinks  = document.querySelectorAll('.sidenav a');
-const navLinkMap = new Map();
-navLinks.forEach(link => {
-  const targetId = link.getAttribute('href').substring(1);
-  navLinkMap.set(targetId, link);
-});
 
+// Performance optimization: Cache navigation links in an O(1) Map.
+// This eliminates the need for expensive document.querySelector() calls
+// inside the high-frequency IntersectionObserver callback below,
+// reducing main thread blocking during scrolling.
+const navMap = new Map();
+navLinks.forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && href.startsWith('#')) {
+    navMap.set(href.substring(1), link);
+  }
+});
 const visibleSections = new Set();
 let lastActiveId = null;
 
@@ -1386,8 +1392,7 @@ const activeObs = new IntersectionObserver(entries => {
   if (top && top.id !== lastActiveId) {
     lastActiveId = top.id;
     navLinks.forEach(a => a.classList.remove('active'));
-    // Performance optimization: Use pre-cached map instead of DOM querying inside scroll callback
-    const match = navLinkMap.get(top.id);
+    const match = navMap.get(top.id);
     if (match) match.classList.add('active');
     activeNavId = top.id;
   }
