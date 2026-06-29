@@ -1,0 +1,1 @@
+## 2026-06-29 - Replace fs.readFileSync with fs.promises.readFile\n**Learning:** Replaced synchronous fs.readFileSync with asynchronous fs.promises.readFile in an async test context to avoid blocking the event loop and improve performance.\n**Action:** Always favor async I/O in async contexts for test code and actual implementations.

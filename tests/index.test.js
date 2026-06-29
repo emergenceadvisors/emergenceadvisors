@@ -23,6 +23,7 @@ describe('index.html', () => {
       unobserve() {}
       disconnect() {}
     }
+    IntersectionObserver.instances = [];
 
     dom = new JSDOM(html, {
       runScripts: 'dangerously',
