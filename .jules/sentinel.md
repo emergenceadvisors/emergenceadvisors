@@ -3,7 +3,7 @@
 **Learning:** Even simple static sites using third-party form handling (e.g. Netlify forms) are susceptible to simple resource exhaustion vectors and abuse if limits are absent.
 **Prevention:** Always enforce logical constraints client-side (e.g., `maxlength`, `min`, `max`, `pattern`) as defense-in-depth, based on reasonable expected lengths for the field data, even if server-side handles ultimate validation.
 
-## 2026-06-17 - Incorrect Form Action Domain
-**Vulnerability:** Incorrect domain in form submit URL (emergence-advisors.com vs emergenceadvisors.com).
-**Learning:** Submitting forms to slightly incorrect URLs can result in data leakage to uncontrolled third parties (potential phishing or PII exposure).
-**Prevention:** Carefully verify third-party domains in endpoints against the primary authorized domain list.
+## 2024-06-18 - Exposed Email via 3rd-Party Form Service
+**Vulnerability:** Client-side form submissions relying on `formsubmit.co` exposed the destination email address (`info@emergence-advisors.com`) directly in the `fetch` API endpoint URL.
+**Learning:** Using basic third-party form services via frontend JavaScript often leaks the routing destination, leaving email addresses highly vulnerable to scraping and spam.
+**Prevention:** Leverage secure, infrastructure-level form handling (like Netlify Forms) which allows form submissions to a generic relative path (`/`) without exposing the final delivery email address in client-side code.
