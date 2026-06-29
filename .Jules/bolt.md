@@ -1,3 +1,1 @@
-## 2026-06-29 - Active Navigation Scroll Optimization
-**Learning:** Replacing `NodeList` iteration in `IntersectionObserver` callbacks with `Map` lookups avoids significant UI blocking.
-**Action:** Always evaluate whether dictionary lookups can replace linear DOM queries in high-frequency event listeners.
+## 2026-06-29 - Replace fs.readFileSync with fs.promises.readFile\n**Learning:** Replaced synchronous fs.readFileSync with asynchronous fs.promises.readFile in an async test context to avoid blocking the event loop and improve performance.\n**Action:** Always favor async I/O in async contexts for test code and actual implementations.
