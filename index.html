@@ -1375,8 +1375,7 @@ navLinks.forEach(link => {
   }
 });
 const visibleSections = new Set();
-let currentActiveId = null; // Performance optimization: Cache active ID to prevent redundant DOM updates
-
+let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1392,14 +1391,16 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-  if (top && top.id !== currentActiveId) { // Performance optimization: Only update DOM if the active section changed
+  if (top && top.id !== currentActiveId) {
     currentActiveId = top.id;
-    // Performance optimization: Select and remove active class from the single active link instead of iterating all links
-    const currentActiveLink = document.querySelector('.sidenav a.active');
-    if (currentActiveLink) currentActiveLink.classList.remove('active');
-
-    const match = document.querySelector(`.sidenav a[href="#${top.id}"]`);
-    if (match) match.classList.add('active');
+    // Bolt Optimization: Only update DOM when active section changes, and reuse existing NodeList
+    navLinks.forEach(a => {
+      if (a.getAttribute('href') === `#${top.id}`) {
+        a.classList.add('active');
+      } else {
+        a.classList.remove('active');
+      }
+    });
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
