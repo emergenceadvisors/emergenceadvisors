@@ -1429,10 +1429,10 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
-
-  // Submit via Netlify Forms to avoid sending PII to a third-party service
   const formData = new FormData(e.target);
 
+  // Security Fix: Use native Netlify form handling to avoid data exfiltration to third-party endpoints.
+  // Submit via POST to '/' using application/x-www-form-urlencoded format.
   fetch('/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
