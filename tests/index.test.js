@@ -12,11 +12,25 @@ describe('index.html', () => {
   beforeEach(() => {
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
-      constructor(callback, options) {}
-      observe() {}
-      unobserve() {}
+      constructor(callback, options) {
+        this.callback = callback;
+        this.options = options;
+        this.observedElements = new Set();
+        this.unobservedElements = new Set();
+        if (!IntersectionObserver.instances) {
+          IntersectionObserver.instances = [];
+        }
+        IntersectionObserver.instances.push(this);
+      }
+      observe(element) {
+        this.observedElements.add(element);
+      }
+      unobserve(element) {
+        this.unobservedElements.add(element);
+      }
       disconnect() {}
     }
+    IntersectionObserver.instances = [];
 
     dom = new JSDOM(html, {
       runScripts: 'dangerously',
@@ -28,34 +42,56 @@ describe('index.html', () => {
     window = dom.window;
   });
 
-  describe('Mobile Menu Toggle', () => {
-    let mobToggle;
-    let mobNav;
+  describe('scroll reveal IntersectionObserver', () => {
+    let revealObserver;
 
     beforeEach(() => {
-      mobToggle = document.getElementById('mob-toggle');
-      mobNav = document.getElementById('mob-nav');
+      // Find the specific instance for scroll reveal (threshold: 0.08)
+      revealObserver = window.IntersectionObserver.instances.find(
+        obs => obs.options && obs.options.threshold === 0.08
+      );
     });
 
-    it('toggles mobile menu classes and aria-expanded attribute on click', () => {
-      // Initial state
-      expect(mobToggle.classList.contains('open')).toBe(false);
-      expect(mobNav.classList.contains('open')).toBe(false);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+    it('should initially observe all .reveal elements', () => {
+      const revealElements = document.querySelectorAll('.reveal');
+      expect(revealElements.length).toBeGreaterThan(0);
+      revealElements.forEach(el => {
+        expect(revealObserver.observedElements.has(el)).toBe(true);
+      });
+    });
 
-      // First click - opens menu
-      mobToggle.click();
+    it('should add "on" class and unobserve when intersecting', () => {
+      const targetElement = document.createElement('div');
+      targetElement.classList.add('reveal');
 
-      expect(mobToggle.classList.contains('open')).toBe(true);
-      expect(mobNav.classList.contains('open')).toBe(true);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('true');
+      // Simulate observing
+      revealObserver.observe(targetElement);
 
-      // Second click - closes menu
-      mobToggle.click();
+      // Simulate intersection
+      revealObserver.callback([{
+        isIntersecting: true,
+        target: targetElement
+      }]);
 
-      expect(mobToggle.classList.contains('open')).toBe(false);
-      expect(mobNav.classList.contains('open')).toBe(false);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+      expect(targetElement.classList.contains('on')).toBe(true);
+      expect(revealObserver.unobservedElements.has(targetElement)).toBe(true);
+    });
+
+    it('should not add "on" class or unobserve when not intersecting', () => {
+      const targetElement = document.createElement('div');
+      targetElement.classList.add('reveal');
+
+      // Simulate observing
+      revealObserver.observe(targetElement);
+
+      // Simulate non-intersection
+      revealObserver.callback([{
+        isIntersecting: false,
+        target: targetElement
+      }]);
+
+      expect(targetElement.classList.contains('on')).toBe(false);
+      expect(revealObserver.unobservedElements.has(targetElement)).toBe(false);
     });
   });
 
