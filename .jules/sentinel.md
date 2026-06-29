@@ -3,7 +3,7 @@
 **Learning:** Even simple static sites using third-party form handling (e.g. Netlify forms) are susceptible to simple resource exhaustion vectors and abuse if limits are absent.
 **Prevention:** Always enforce logical constraints client-side (e.g., `maxlength`, `min`, `max`, `pattern`) as defense-in-depth, based on reasonable expected lengths for the field data, even if server-side handles ultimate validation.
 
-## 2025-02-18 - Third-Party Form Submission Data Exfiltration Risk
-**Vulnerability:** Form data being submitted to a third-party endpoint (`formsubmit.co`) on a site already configured with a native forms provider (Netlify).
-**Learning:** Developers sometimes reach for third-party quick-fix solutions for form submission without realizing the native host (like Netlify) offers built-in, more secure handling. This exposes sensitive PII (Personally Identifiable Information) and consultation details to an unnecessary third party.
-**Prevention:** Audit form `action` endpoints or AJAX submission destinations to ensure they use first-party or explicitly vetted internal endpoints. Remove broad `connect-src` CSP rules that allow external form submissions.
+## 2024-06-24 - Data Exfiltration Risk in Third-Party Form Submission
+**Vulnerability:** Form data containing PII (Personally Identifiable Information) and business details was being submitted to a third-party service (`formsubmit.co`) via an AJAX fetch request, which poses a data exfiltration and privacy security risk.
+**Learning:** Using third-party form processors in static HTML projects introduces an unnecessary external dependency that has access to all submitted sensitive user data. This violates the principle of least privilege and data minimization.
+**Prevention:** Always use first-party infrastructure (like Netlify Forms native functionality in this context) to process sensitive form submissions. Configure forms to use internal endpoints securely without exposing user data to unvetted third parties.
