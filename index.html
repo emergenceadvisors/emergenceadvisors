@@ -1391,10 +1391,14 @@ const activeObs = new IntersectionObserver(entries => {
   }
   if (top && top.id !== currentActiveId) {
     currentActiveId = top.id;
-    navLinks.forEach(a => a.classList.remove('active'));
-    const match = navMap.get(top.id);
-    if (match) match.classList.add('active');
-    activeNavId = top.id;
+    // Performance optimization: Avoid redundant querySelector and prevent thrashing DOM when class isn't changing.
+    navLinks.forEach(a => {
+      if (a.getAttribute('href') === `#${top.id}`) {
+        a.classList.add('active');
+      } else {
+        a.classList.remove('active');
+      }
+    });
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
