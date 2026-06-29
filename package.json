@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/emergenceadvisors/emergenceadvisors#readme",
   "devDependencies": {
-    "@playwright/test": "^1.61.0"
+    "@playwright/test": "^1.61.0",
+    "jest": "^30.4.2",
+    "jsdom": "^22.1.0"
   }
 }
