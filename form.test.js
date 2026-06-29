@@ -29,7 +29,7 @@ test('handleForm testing suite', async (t) => {
   t.beforeEach(() => {
     // Reset DOM mocks
     domElements = {
-      'f-btn': { textContent: 'Send Message \u2192', disabled: false },
+      'f-btn': { textContent: 'Send Message \u2192', disabled: false, attributes: {}, setAttribute: function(attr, val) { this.attributes[attr] = val; }, removeAttribute: function(attr) { delete this.attributes[attr]; } },
       'f-inner': { style: { display: 'block' } },
       'f-success': { classList: { classes: [], add: function(c) { this.classes.push(c); } } }
     };
