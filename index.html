@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Security: Restrict resource origins to mitigate XSS (Content-Security-Policy) -->
-<!-- Security: Removed formsubmit.co from connect-src as we are replacing it with native secure netlify forms -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
 <title>Emergence Advisors Inc. — Financial & Business Management Consulting | Laguna Niguel, CA</title>
 <meta name="description" content="Emergence Advisors Inc. provides financial management and business management consulting for business owners in Southern California. Laguna Niguel, CA. (949) 409-5407.">
@@ -1433,10 +1432,9 @@ function handleForm(e) {
   const btn = document.getElementById('f-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
+  // SECURITY: Use Netlify native form handling to prevent data exfiltration
   const formData = new FormData(e.target);
 
-  // Security Fix: Use native Netlify form handling to avoid data exfiltration to third-party endpoints.
-  // Submit via POST to '/' using application/x-www-form-urlencoded format.
   fetch('/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
