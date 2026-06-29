@@ -24,6 +24,10 @@ document.addEventListener('click', e => {
   e.preventDefault();
   const offset = window.innerWidth <= 1100 ? 68 : 0;
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+
+  // Palette: shift focus to target for accessibility, so next Tab goes to target instead of starting from top
+  el.setAttribute('tabindex', '-1');
+  el.focus({ preventScroll: true });
 });
 
 /* active nav via IntersectionObserver */
