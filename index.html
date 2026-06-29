@@ -1262,7 +1262,7 @@ footer {
                 <p class="form-note">We do not share your information. No cold calls. No lists.</p>
               </form>
             </div>
-            <div class="success-state" id="f-success" role="status" aria-live="polite">
+            <div class="success-state" id="f-success" tabindex="-1" role="status">
               <div class="success-mark" aria-hidden="true">&#10003;</div>
               <h3>Message received.</h3>
               <p>We will be in touch within one business day. Urgent? Call <a href="tel:+19494095407" style="color:var(--gold);text-decoration:none;">(949) 409-5407</a>.</p>
@@ -1443,7 +1443,9 @@ function handleForm(e) {
   .then(res => {
     if (!res.ok) throw new Error('Server error');
     document.getElementById('f-inner').style.display = 'none';
-    document.getElementById('f-success').classList.add('show');
+    const successEl = document.getElementById('f-success');
+    successEl.classList.add('show');
+    successEl.focus();
   })
   .catch(() => {
     btn.textContent = 'Send Message \u2192';

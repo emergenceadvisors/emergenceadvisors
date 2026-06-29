@@ -1,6 +1,7 @@
 ## 2026-06-17 - Added Global focus-visible indicator
 **Learning:** Many custom-styled sites completely lack clear focus rings for keyboard users, relying only on default browser outlines (or worse, removing them entirely).
 **Action:** Always add a brand-aligned `:focus-visible` to the global CSS reset so that every interactive element gets accessible keyboard focus outlines out-of-the-box, then adjust specific elements (like inputs) that have their own custom focus states.
-## 2024-06-25 - Explicit Form Indicators
-**Learning:** Adding explicit text and color to labels such as required asterisks or `(optional)` helper texts significantly improves user clarity over just relying on default placeholder texts or validation errors. Ensure asterisks have `aria-hidden="true"` to prevent redundant screen reader announcements when an `required` attribute is already in place. Also, remember to investigate and use existing design tokens/classes instead of inline CSS when modifying templates.
-**Action:** Always verify if a form's required and optional fields are visually distinct and explicitly marked. Use `aria-hidden="true"` on visual asterisks if `required` attribute exists, and prioritize using existing CSS utility classes over custom inline styles to adhere to strict boundary rules.
+
+## 2026-06-17 - AJAX Form Focus Management
+**Learning:** During asynchronous form submissions, hiding the form and revealing a success message natively causes keyboard users and screen readers to lose focus context if focus isn't deliberately shifted. They get dropped back to the top of the document or left in a void.
+**Action:** When implementing AJAX form success states, always add `tabindex="-1"` and `role="status"` to the success message container, and programmatically shift focus to it via `.focus()` after submission. Hide decorative icons in success messages with `aria-hidden="true"`.
