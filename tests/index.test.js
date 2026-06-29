@@ -9,25 +9,18 @@ describe('index.html', () => {
   let document;
   let window;
 
+  let mockIntersectionObserverCallbacks;
+
   beforeEach(() => {
+    mockIntersectionObserverCallbacks = [];
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
       constructor(callback, options) {
         this.callback = callback;
-        this.options = options;
-        this.observedElements = new Set();
-        this.unobservedElements = new Set();
-        if (!IntersectionObserver.instances) {
-          IntersectionObserver.instances = [];
-        }
-        IntersectionObserver.instances.push(this);
+        mockIntersectionObserverCallbacks.push(callback);
       }
-      observe(element) {
-        this.observedElements.add(element);
-      }
-      unobserve(element) {
-        this.unobservedElements.add(element);
-      }
+      observe() {}
+      unobserve() {}
       disconnect() {}
     }
     IntersectionObserver.instances = [];
@@ -36,62 +29,51 @@ describe('index.html', () => {
       runScripts: 'dangerously',
       beforeParse(window) {
         window.IntersectionObserver = IntersectionObserver;
+        window.mockIntersectionObserverCallbacks = mockIntersectionObserverCallbacks;
       }
     });
     document = dom.window.document;
     window = dom.window;
   });
 
-  describe('scroll reveal IntersectionObserver', () => {
-    let revealObserver;
+  describe('active navigation links', () => {
+    it('updates active class based on section visibility', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidenav a');
 
-    beforeEach(() => {
-      // Find the specific instance for scroll reveal (threshold: 0.08)
-      revealObserver = window.IntersectionObserver.instances.find(
-        obs => obs.options && obs.options.threshold === 0.08
-      );
-    });
+      // Ensure we have captured the IntersectionObserver callback
+      expect(window.mockIntersectionObserverCallbacks.length).toBeGreaterThan(0);
+      const activeObsCallback = window.mockIntersectionObserverCallbacks[0];
 
-    it('should initially observe all .reveal elements', () => {
-      const revealElements = document.querySelectorAll('.reveal');
-      expect(revealElements.length).toBeGreaterThan(0);
-      revealElements.forEach(el => {
-        expect(revealObserver.observedElements.has(el)).toBe(true);
-      });
-    });
+      // Initial state - first link should be active, others not
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
 
-    it('should add "on" class and unobserve when intersecting', () => {
-      const targetElement = document.createElement('div');
-      targetElement.classList.add('reveal');
-
-      // Simulate observing
-      revealObserver.observe(targetElement);
-
-      // Simulate intersection
-      revealObserver.callback([{
-        isIntersecting: true,
-        target: targetElement
+      // Simulate the first section intersecting
+      activeObsCallback([{
+        target: sections[0],
+        isIntersecting: true
       }]);
 
-      expect(targetElement.classList.contains('on')).toBe(true);
-      expect(revealObserver.unobservedElements.has(targetElement)).toBe(true);
-    });
+      // Since section 0 is visible, link 0 should be active
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
 
-    it('should not add "on" class or unobserve when not intersecting', () => {
-      const targetElement = document.createElement('div');
-      targetElement.classList.add('reveal');
+      // Simulate scrolling: section 0 is out, section 1 is in
+      activeObsCallback([
+        {
+          target: sections[0],
+          isIntersecting: false
+        },
+        {
+          target: sections[1],
+          isIntersecting: true
+        }
+      ]);
 
-      // Simulate observing
-      revealObserver.observe(targetElement);
-
-      // Simulate non-intersection
-      revealObserver.callback([{
-        isIntersecting: false,
-        target: targetElement
-      }]);
-
-      expect(targetElement.classList.contains('on')).toBe(false);
-      expect(revealObserver.unobservedElements.has(targetElement)).toBe(false);
+      // Now link 1 should be active and link 0 inactive
+      expect(navLinks[0].classList.contains('active')).toBe(false);
+      expect(navLinks[1].classList.contains('active')).toBe(true);
     });
   });
 
