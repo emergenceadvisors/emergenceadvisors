@@ -1,6 +1,7 @@
 ## 2026-06-17 - [Prevent Layout Thrashing in IntersectionObserver]
 **Learning:** Calling `getBoundingClientRect()` inside an IntersectionObserver callback causes synchronous layout thrashing (reflow) on the main thread, negating the performance benefits of using IntersectionObserver instead of scroll events.
 **Action:** Always rely on DOM order or `IntersectionObserverEntry.boundingClientRect` rather than manually calling `getBoundingClientRect()` dynamically inside the observer callback.
-## 2026-06-18 - [Prevent Redundant DOM Queries in IntersectionObserver]
-**Learning:** `IntersectionObserver` callbacks can fire frequently. Even if we avoid layout thrashing, running `document.querySelectorAll`, `classList.remove`, and `document.querySelector` blindly on every trigger can still cause unnecessary execution overhead if the actual "active" element hasn't changed.
-**Action:** Always cache state (e.g., the `id` of the currently active section) to short-circuit DOM manipulations when the state remains unchanged across observer callbacks.
+
+## 2024-05-19 - [DOM querying in scroll handlers]
+**Learning:** `document.querySelector` inside `IntersectionObserver` callbacks or scroll handlers causes frequent DOM tree traversal on the main thread during high-frequency events. Using an ID-to-element Map reduces this to O(1) property lookups.
+**Action:** When updating active navigation or TOC states based on scroll position, pre-cache the target elements in a Map on initialization.

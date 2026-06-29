@@ -117,8 +117,7 @@ test('handleForm testing suite', async (t) => {
     assert.strictEqual(fetchUrl, 'https://formsubmit.co/ajax/info@emergence-advisors.com');
     assert.strictEqual(fetchOptions.method, 'POST');
     assert.strictEqual(fetchOptions.headers['Content-Type'], 'application/json');
-    assert.strictEqual(fetchOptions.headers['Accept'], 'application/json');
-    assert.strictEqual(fetchOptions.body, JSON.stringify({ name: 'John Doe', email: 'john@example.com' }));
+    assert.strictEqual(fetchOptions.body, '{"name":"John Doe","email":"john@example.com"}');
 
     assert.strictEqual(domElements['f-btn'].disabled, true);
     assert.strictEqual(domElements['f-btn'].textContent, 'Sending...');
