@@ -1,9 +1,6 @@
 ## 2026-06-17 - Added Global focus-visible indicator
 **Learning:** Many custom-styled sites completely lack clear focus rings for keyboard users, relying only on default browser outlines (or worse, removing them entirely).
 **Action:** Always add a brand-aligned `:focus-visible` to the global CSS reset so that every interactive element gets accessible keyboard focus outlines out-of-the-box, then adjust specific elements (like inputs) that have their own custom focus states.
-## 2026-06-23 - Added Loading and Disabled States to Async Buttons
-**Learning:** For a single-page HTML application relying on inline `<style>` and manual DOM manipulations, simply doing `disabled = true` fails to visually signal correctly or communicate via screen reader if there are no corresponding `.btn:disabled` CSS rules and `aria-busy` attributes set dynamically during async requests (like `fetch`). Tests that construct DOM node mocks via literal objects must have mocked `setAttribute`/`removeAttribute` functions added if the target functions depend on modifying custom attributes on native components.
-**Action:** When implementing disable/loading states on vanilla JS components, always ensure:
-1. `btn:disabled` opacity or cursor changes are added to CSS if absent.
-2. `btn:hover` rules use `:not(:disabled)` so inactive buttons do not pop.
-3. `aria-busy='true'` is attached and explicitly detached within the `.then`/`.catch` chain to announce the async event.
+## 2024-06-25 - Explicit Form Indicators
+**Learning:** Adding explicit text and color to labels such as required asterisks or `(optional)` helper texts significantly improves user clarity over just relying on default placeholder texts or validation errors. Ensure asterisks have `aria-hidden="true"` to prevent redundant screen reader announcements when an `required` attribute is already in place. Also, remember to investigate and use existing design tokens/classes instead of inline CSS when modifying templates.
+**Action:** Always verify if a form's required and optional fields are visually distinct and explicitly marked. Use `aria-hidden="true"` on visual asterisks if `required` attribute exists, and prioritize using existing CSS utility classes over custom inline styles to adhere to strict boundary rules.

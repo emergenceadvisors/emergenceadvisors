@@ -1224,26 +1224,26 @@ footer {
                 <p style="display:none;"><label>Leave blank: <input name="bot-field"></label></p>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-name">Your Name <span style="color: var(--gold);" aria-hidden="true">*</span></label>
+                    <label for="f-name">Your Name <span aria-hidden="true" style="color: var(--gold);">*</span></label>
                     <input type="text" id="f-name" name="name" placeholder="Full name" maxlength="100" required>
                   </div>
                   <div class="fg">
-                    <label for="f-email">Email Address <span style="color: var(--gold);" aria-hidden="true">*</span></label>
+                    <label for="f-email">Email Address <span aria-hidden="true" style="color: var(--gold);">*</span></label>
                     <input type="email" id="f-email" name="email" placeholder="you@company.com" maxlength="100" required>
                   </div>
                 </div>
                 <div class="fg-2">
                   <div class="fg">
-                    <label for="f-phone">Phone <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
+                    <label for="f-phone">Phone <span class="form-note" style="display:inline; margin:0; text-transform:lowercase;">(optional)</span></label>
                     <input type="tel" id="f-phone" name="phone" placeholder="(714) 000-0000" maxlength="30">
                   </div>
                   <div class="fg">
-                    <label for="f-co">Business Name <span aria-hidden="true" style="text-transform: none; font-size: 0.8em; color: var(--text-3); font-weight: normal;">(optional)</span></label>
+                    <label for="f-co">Business Name <span class="form-note" style="display:inline; margin:0; text-transform:lowercase;">(optional)</span></label>
                     <input type="text" id="f-co" name="company" placeholder="Your company" maxlength="100">
                   </div>
                 </div>
                 <div class="fg">
-                  <label for="f-svc">What do you need help with? <span style="color: var(--gold);" aria-hidden="true">*</span></label>
+                  <label for="f-svc">What do you need help with? <span aria-hidden="true" style="color: var(--gold);">*</span></label>
                   <select id="f-svc" name="service" required>
                     <option value="">Select one...</option>
                     <option value="financial-management">Financial management &amp; cleanup</option>
@@ -1256,7 +1256,7 @@ footer {
                   </select>
                 </div>
                 <div class="fg">
-                  <label for="f-msg">Describe the situation <span style="color: var(--gold);" aria-hidden="true">*</span></label>
+                  <label for="f-msg">Describe the situation <span aria-hidden="true" style="color: var(--gold);">*</span></label>
                   <textarea id="f-msg" name="message" placeholder="What is the biggest problem in your business right now?" maxlength="2000" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-gold btn-full" id="f-btn">Send Message &rarr;</button>
