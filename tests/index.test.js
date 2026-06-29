@@ -9,53 +9,71 @@ describe('index.html', () => {
   let document;
   let window;
 
+  let mockIntersectionObserverCallbacks;
+
   beforeEach(() => {
+    mockIntersectionObserverCallbacks = [];
     // Mock IntersectionObserver before initializing JSDOM
     class IntersectionObserver {
-      constructor(callback, options) {}
+      constructor(callback, options) {
+        this.callback = callback;
+        mockIntersectionObserverCallbacks.push(callback);
+      }
       observe() {}
       unobserve() {}
       disconnect() {}
     }
+    IntersectionObserver.instances = [];
 
     dom = new JSDOM(html, {
       runScripts: 'dangerously',
       beforeParse(window) {
         window.IntersectionObserver = IntersectionObserver;
+        window.mockIntersectionObserverCallbacks = mockIntersectionObserverCallbacks;
       }
     });
     document = dom.window.document;
     window = dom.window;
   });
 
-  describe('Mobile Menu Toggle', () => {
-    let mobToggle;
-    let mobNav;
+  describe('active navigation links', () => {
+    it('updates active class based on section visibility', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidenav a');
 
-    beforeEach(() => {
-      mobToggle = document.getElementById('mob-toggle');
-      mobNav = document.getElementById('mob-nav');
-    });
+      // Ensure we have captured the IntersectionObserver callback
+      expect(window.mockIntersectionObserverCallbacks.length).toBeGreaterThan(0);
+      const activeObsCallback = window.mockIntersectionObserverCallbacks[0];
 
-    it('toggles mobile menu classes and aria-expanded attribute on click', () => {
-      // Initial state
-      expect(mobToggle.classList.contains('open')).toBe(false);
-      expect(mobNav.classList.contains('open')).toBe(false);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+      // Initial state - first link should be active, others not
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
 
-      // First click - opens menu
-      mobToggle.click();
+      // Simulate the first section intersecting
+      activeObsCallback([{
+        target: sections[0],
+        isIntersecting: true
+      }]);
 
-      expect(mobToggle.classList.contains('open')).toBe(true);
-      expect(mobNav.classList.contains('open')).toBe(true);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('true');
+      // Since section 0 is visible, link 0 should be active
+      expect(navLinks[0].classList.contains('active')).toBe(true);
+      expect(navLinks[1].classList.contains('active')).toBe(false);
 
-      // Second click - closes menu
-      mobToggle.click();
+      // Simulate scrolling: section 0 is out, section 1 is in
+      activeObsCallback([
+        {
+          target: sections[0],
+          isIntersecting: false
+        },
+        {
+          target: sections[1],
+          isIntersecting: true
+        }
+      ]);
 
-      expect(mobToggle.classList.contains('open')).toBe(false);
-      expect(mobNav.classList.contains('open')).toBe(false);
-      expect(mobToggle.getAttribute('aria-expanded')).toBe('false');
+      // Now link 1 should be active and link 0 inactive
+      expect(navLinks[0].classList.contains('active')).toBe(false);
+      expect(navLinks[1].classList.contains('active')).toBe(true);
     });
   });
 
