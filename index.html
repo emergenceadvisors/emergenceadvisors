@@ -1373,8 +1373,7 @@ navLinks.forEach(link => {
   }
 });
 const visibleSections = new Set();
-let lastActiveId = null;
-
+let currentActiveId = null;
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1390,8 +1389,8 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-  if (top && top.id !== lastActiveId) {
-    lastActiveId = top.id;
+  if (top && top.id !== currentActiveId) {
+    currentActiveId = top.id;
     navLinks.forEach(a => a.classList.remove('active'));
     const match = navMap.get(top.id);
     if (match) match.classList.add('active');
