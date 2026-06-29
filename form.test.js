@@ -110,7 +110,7 @@ test('handleForm testing suite', async (t) => {
     await global.handleForm(mockEvent); // handleForm doesn't return a promise but fetch inside it does
 
     // wait a tick for promise to resolve
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     // Assert
     assert.strictEqual(fetchCalled, true);

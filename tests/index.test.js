@@ -161,4 +161,69 @@ describe('index.html', () => {
       expect(window.alert).not.toHaveBeenCalled();
     });
   });
+
+  describe('toggleSvc', () => {
+    let items;
+    let btns;
+
+    beforeEach(() => {
+      items = document.querySelectorAll('.svc-accord li');
+      btns = document.querySelectorAll('.svc-accord .svc-btn');
+    });
+
+    it('opens a closed item and updates aria-expanded', () => {
+      const item = items[0];
+      const btn = btns[0];
+
+      // Initial state check
+      expect(item.classList.contains('open')).toBe(false);
+      expect(btn.getAttribute('aria-expanded')).toBe('false');
+
+      // Call toggleSvc
+      window.toggleSvc(btn);
+
+      // Verify open state
+      expect(item.classList.contains('open')).toBe(true);
+      expect(btn.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('closes an already open item', () => {
+      const item = items[0];
+      const btn = btns[0];
+
+      // Open it first
+      window.toggleSvc(btn);
+      expect(item.classList.contains('open')).toBe(true);
+      expect(btn.getAttribute('aria-expanded')).toBe('true');
+
+      // Click again to close
+      window.toggleSvc(btn);
+
+      // Verify closed state
+      expect(item.classList.contains('open')).toBe(false);
+      expect(btn.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('closes other open items when opening a new one', () => {
+      const item1 = items[0];
+      const btn1 = btns[0];
+      const item2 = items[1];
+      const btn2 = btns[1];
+
+      // Open first item
+      window.toggleSvc(btn1);
+      expect(item1.classList.contains('open')).toBe(true);
+
+      // Open second item
+      window.toggleSvc(btn2);
+
+      // Verify second item is open
+      expect(item2.classList.contains('open')).toBe(true);
+      expect(btn2.getAttribute('aria-expanded')).toBe('true');
+
+      // Verify first item is closed
+      expect(item1.classList.contains('open')).toBe(false);
+      expect(btn1.getAttribute('aria-expanded')).toBe('false');
+    });
+  });
 });

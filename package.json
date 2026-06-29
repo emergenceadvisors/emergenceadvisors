@@ -20,7 +20,7 @@
   "homepage": "https://github.com/emergenceadvisors/emergenceadvisors#readme",
   "devDependencies": {
     "@playwright/test": "^1.61.0",
-    "jest": "^29.7.0",
+    "jest": "^30.4.2",
     "jsdom": "^22.1.0"
   }
 }
