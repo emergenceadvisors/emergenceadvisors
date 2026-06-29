@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test"
+    "test": "node --test test.js form.test.js && jest tests/index.test.js"
   },
   "repository": {
     "type": "git",

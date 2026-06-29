@@ -1415,7 +1415,7 @@ function handleForm(e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  fetch('https://formsubmit.co/ajax/info@emergence-advisors.com', {
+  fetch('https://formsubmit.co/ajax/info@emergenceadvisors.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(data)
