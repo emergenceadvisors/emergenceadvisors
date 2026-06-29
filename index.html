@@ -1367,7 +1367,8 @@ navLinks.forEach(link => {
 });
 
 const visibleSections = new Set();
-let currentActiveId = null;
+let lastActiveId = null;
+
 const activeObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) visibleSections.add(entry.target);
@@ -1383,8 +1384,8 @@ const activeObs = new IntersectionObserver(entries => {
       break;
     }
   }
-  if (top && top.id !== currentActiveId) {
-    currentActiveId = top.id;
+  if (top && top.id !== lastActiveId) {
+    lastActiveId = top.id;
     navLinks.forEach(a => a.classList.remove('active'));
     // Performance optimization: Use pre-cached map instead of DOM querying inside scroll callback
     const match = navLinkMap.get(top.id);
