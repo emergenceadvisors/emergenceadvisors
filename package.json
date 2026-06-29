@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "test": "node --test test.js form.test.js && jest tests/index.test.js"
   },
@@ -22,8 +19,6 @@
   },
   "homepage": "https://github.com/emergenceadvisors/emergenceadvisors#readme",
   "devDependencies": {
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
-    "jsdom": "^22.1.0"
+    "@playwright/test": "^1.61.0"
   }
 }
