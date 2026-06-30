@@ -59,15 +59,14 @@ const activeObs = new IntersectionObserver(entries => {
     }
   }
   if (top && top.id !== currentActiveId) {
+    // Bolt Optimization: Use O(1) Map lookup instead of O(N) iteration to update DOM classes
+    if (currentActiveId) {
+      const oldLink = navMap.get(currentActiveId);
+      if (oldLink) oldLink.classList.remove('active');
+    }
     currentActiveId = top.id;
-    // Bolt Optimization: Only update DOM when active section changes, and reuse existing NodeList
-    navLinks.forEach(a => {
-      if (a.getAttribute('href') === `#${top.id}`) {
-        a.classList.add('active');
-      } else {
-        a.classList.remove('active');
-      }
-    });
+    const newLink = navMap.get(currentActiveId);
+    if (newLink) newLink.classList.add('active');
   }
 }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
 sections.forEach(s => activeObs.observe(s));
