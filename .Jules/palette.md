@@ -5,3 +5,7 @@
 ## 2026-06-25 - Missing Visual Required Indicators on Custom Forms
 **Learning:** Custom forms that use HTML5 `required` attributes often miss visual indicators (like asterisks), which leads to user friction because they cannot distinguish mandatory from optional fields until validation fails.
 **Action:** Always verify that input labels visually communicate requirement status when the `required` attribute is present on the input field.
+
+## 2026-06-30 - Smooth Scroll Breaks Native Focus Routing
+**Learning:** Using `e.preventDefault()` for custom smooth scrolling intercepts native anchor fragment navigation, breaking standard browser focus routing. Keyboard users and screen readers lose context because focus remains on the clicked link rather than moving to the target section.
+**Action:** Always manually manage focus when overriding native anchor behavior by explicitly setting `tabindex="-1"` on the target element and calling `el.focus({ preventScroll: true })`.
