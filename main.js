@@ -24,6 +24,8 @@ document.addEventListener('click', e => {
   e.preventDefault();
   const offset = window.innerWidth <= 1100 ? 68 : 0;
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+  el.setAttribute('tabindex', '-1');
+  el.focus({ preventScroll: true });
 });
 
 /* active nav via IntersectionObserver */
