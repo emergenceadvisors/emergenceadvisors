@@ -22,6 +22,11 @@ document.addEventListener('click', e => {
   const el = document.querySelector(id);
   if (!el) return;
   e.preventDefault();
+
+  // Fix focus routing broken by preventDefault()
+  el.setAttribute('tabindex', '-1');
+  el.focus({ preventScroll: true });
+
   const offset = window.innerWidth <= 1100 ? 68 : 0;
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
 });
